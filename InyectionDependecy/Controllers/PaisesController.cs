@@ -1,99 +1,51 @@
 ﻿using InyectionDependecy.Contratos;
+using InyectionDependecy.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
-namespace InyectionDependecy.Controllers
+namespace InyeccionDependencias.Controllers
 {
-    public class PaisesController : Controller
+    public class PaisesController : ApiController
     {
-        public readonly PaisesController repository;
+        private readonly IRepositoryPaises repositorioPaises;
 
-        public PaisesController(IRepositoryPaises repository)
+        public PaisesController(IRepositoryPaises repositorioPaises)
         {
-            this.repository = (PaisesController)repository;
+            this.repositorioPaises = repositorioPaises;
         }
 
-
-
-        // GET: Paises
-        public ActionResult Index()
+        // GET: api/Paises
+        public IEnumerable<Paises> Get()
         {
-            return View();
+            return repositorioPaises.GetAll();
         }
 
-        // GET: Paises/Details/5
-        public ActionResult Details(int id)
+        // GET: api/Paises/5
+        public Paises Get(int id)
         {
-            return View();
+            return repositorioPaises.Getfor(p => p.Id == id).First();
         }
 
-        // GET: Paises/Create
-        public ActionResult Create()
+        // POST: api/Paises
+        public void Post([FromBody] Paises pais)
         {
-            return View();
+            repositorioPaises.Create(pais);
         }
 
-        // POST: Paises/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        // PUT: api/Paises/5
+        public void Put(int id, [FromBody] Paises pais)
         {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            repositorioPaises.Update(pais);
         }
 
-        // GET: Paises/Edit/5
-        public ActionResult Edit(int id)
+        // DELETE: api/Paises/5
+        public void Delete(int id)
         {
-            return View();
-        }
 
-        // POST: Paises/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Paises/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Paises/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
