@@ -5,7 +5,8 @@ namespace InyectionDependecy.App_Start
 {
     using System;
     using System.Web;
-
+    using InyectionDependecy.Contratos;
+    using InyectionDependecy.Models.Repository;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
@@ -44,6 +45,8 @@ namespace InyectionDependecy.App_Start
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
                 kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+                System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver = new Ninject.WebApi.DependencyResolver.NinjectDependencyResolver(kernel);
+
 
                 RegisterServices(kernel);
                 return kernel;
@@ -61,7 +64,7 @@ namespace InyectionDependecy.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind
+            kernel.Bind<IRepositoryPaises>().To<RepositoryPaises>();
 
         }        
     }
